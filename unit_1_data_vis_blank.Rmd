@@ -1,4 +1,27 @@
-# Intro to data visualization: Plotting in R {#Plotting}
+---
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+---
+# Intro to data visualization
+
+## Learning Objectives
+- The learning objectives for today are to begin getting comfortable navigating RStudio. A great way to do this is through data visualization. At the end of todays activities students will be able to:
+
+1. Load data to RStudio
+2. Visualize data by making plots/figures
+3. Install and load packages
+4. Begin coding using tidyverse
+5. Have an understanding of projects and folder management
+6. Knit .Rmd to .html
+
+Follow this [link](https://github.com/tpcovino/unit_1_data_visualization){target="_blank"} to download everything you need for this unit. When you get to GitHub click on "Code" (green button) and select "download zip". You will then save this to a local folder where you should do all of your work for this class. You will work through the "_blank.Rmd". Always be sure to read the README.md files in the GitHub repo.  
+
+Once you have this folder saved where you would like it, open RStudio and navigate to the folder. Next, open the project (".Rproj"). Doing so will set the folder as the working directory, make your life easier, and make everything generally work. The use of projects is highly recommended and is the practice we will follow in this class. You will learn more about projects later, for now just know they are useful and make things easier. In this unit we want to start familiarizing ourselves with R by visualizing some hydrological data.
+
+The [reading](https://r4ds.had.co.nz/introduction.html){target="_blank"} for this week will also begin to get you more familiar with R and RStudio (please read "1 Introduction"). 
 
 ## Download and install tidyverse library
 
@@ -7,7 +30,8 @@ We will use the tidyverse a lot this semester. It is a suite of packages that ha
 You only have to install the library once. You have to load it using the library() function each time you start an R session.
 
 ```{r}
-
+#install.packages("tidyverse")
+library(tidyverse)
 
 ```
 
@@ -16,7 +40,9 @@ You only have to install the library once. You have to load it using the library
 The following lines will read in the data we will use for this exercise. Don't worry about this right now beyond running it, we will talk more about it later.
 
 ```{r}
-
+Pine <- read_csv("pine_jan-mar_2010.csv") 
+SNP <- read_csv("pine_nfdr_jan-mar_2010.csv")
+RBI <- read_csv("flashy_dat_subset.csv")
 ```
 
 ![Basic ggplot syntax](images/GGplot syntax.png "GGplot syntax")
@@ -27,15 +53,17 @@ Let's look at the Pine data, plotting streamflow (the cfs column) by the date (d
 
 ```{r}
 
+
 ```
 
 ## Change point type
 
-Now let's make the same plot but show the data as points, using the pch parameter in geom_point() we can change the point type to any of the following:
+Now let's make the same plot but show the data as points, using the shape parameter in geom_point() we can change the point type to any of the following:
 
-![pch options from R help file](images/pch.png "pch values and points from R help file")
+See [here](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html){target="_blank"}
 
 ```{r}
+
 
 ```
 
@@ -49,6 +77,7 @@ Take the color = "blue" out of the aesthetic and you're golden.
 
 ```{r}
 
+
 ```
 
 ## Controlling color with a third variable and other functions
@@ -57,29 +86,58 @@ Let's plot the data as a line again, but play with it a bit.
 
 First: make the line blue
 
-Second: change the theme
-
-[See ggplot themes here](https://ggplot2.tidyverse.org/reference/ggtheme.html)
-
-Third: change the axis labels
-
-Fourth: color by discharge
-
-[See here for changing axis labels and coloring by a variable (in this case discharge)](https://ggplot2.tidyverse.org/reference/labs.html)
-
 ```{r}
 
 ```
 
-## Plotting multiple groups
+Second: change the theme
+
+[See ggplot themes here](https://ggplot2.tidyverse.org/reference/ggtheme.html){target="_blank"}
+
+
+```{r}
+
+  
+```
+
+
+Third: change the axis labels
+
+
+```{r}
+
+  
+```
+
+
+Fourth: color by discharge
+
+[See here for changing axis labels and coloring by a variable (in this case discharge)](https://ggplot2.tidyverse.org/reference/labs.html){target="_blank"}
+
+```{r}
+
+  
+```
+
+
+## Plotting multiple groups (adding a third variable)
 
 The SNP dataset has two different streams: Pine and NFDR
 
-We can look at the two of those a couple of different ways
+We can look at the two of those a couple of different ways.
 
-First, make two lines, colored by the stream by adding color = to your aesthetic.
+First, make two lines, colored by the stream by adding color = to your aesthetic. Remember that we can have a look at column headers with head(df), if you need to remind yourself of variable names. 
 
 ```{r}
+
+
+
+```
+
+
+Now use what we just did to make that figure look better. 
+```{r}
+
 
 ```
 
@@ -87,9 +145,11 @@ First, make two lines, colored by the stream by adding color = to your aesthetic
 
 We can also use facets.
 
-You must tell the facet_wrap what variable to use to make the separate panels (facet =). It'll decide how to orient them or you can tell it how. We want them to be on top of each other so we are going to tell it we want 2 rows by setting nrow = 2. Note that we have to put the column used to make the facets in quotes after facets =
+You must tell the facet_wrap what variable to use to make the separate panels (facets =). It'll decide how to orient them or you can tell it how. We want them to be on top of each other so we are going to tell it we want 2 rows by setting nrow = 2. Note that we have to put the column used to make the facets in quotes after facets =
 
 ```{r}
+
+
 
 ```
 
@@ -98,6 +158,8 @@ You must tell the facet_wrap what variable to use to make the separate panels (f
 You can also use facet_grid() to break your plots up into panels based on two variables. Below we will create a panel for each month in each watershed. Adding scales = "free" allows facet_grid to change the axes. By default, all axes will be the same. This is often what we want, so we can more easily compare magnitudes, but sometimes we are looking for patterns more, so we may want to let the axes have whatever range works for the individual plots.
 
 ```{r echo=TRUE}
+
+
 
 ```
 
@@ -109,6 +171,17 @@ Because the data span several orders of magnitude, we will have to log the y axi
 
 ```{r echo=TRUE}
 
+
+
+```
+
+
+To investigate the boxplot more closely we can use "plotly". 
+```{r echo=TRUE}
+#install.packages("plotly")
+library(plotly)
+
+
 ```
 
 ## More about color, size, etc
@@ -117,18 +190,49 @@ Let's play around a bit with controlling color, point size, etc with other data.
 
 We can control the size of points by putting size = in the aes() and color by putting color =
 
+
+```{r echo=TRUE}
+
+
+
+```
+
+
 If you use a point type that has a background, like \#21, you can also set the background color using bg =
 
 If points are too close together to see them all you can use a hollow point type or set the alpha lower so the points are transparent (alpha = )
 
+
 ```{r echo=TRUE}
 
+
+
 ```
+
+You can also easily make that an interactive plot with ggplotly. Try doing that. 
 
 ## Multiple geoms
 
-Finally: You can add multiple geoms to the same plot. Examples of when you might want to do this are when you are showing a line fit and want to show the points as well, or maybe showing a boxplot and want to show the data behind it. You simply add additional geom\_... lines to add additional geoms.
+Finally: You can add multiple geoms to the same plot. Examples of when you might want to do this are when you are showing point data and you want to have a line connecting them. Or if you are fitting a linear model to two data sets and you want to show each. These are just two examples. There are many other reasons you would do this. Point being you simply add additional geom\_... lines to add additional geoms.
+
+
+See [here](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html){target="_blank"} for information on linetype aesthetics. Using a "dashed" linetype to connect point measurements is a common approach. 
+
+```{r}
+
+
+```
+
 
 ```{r echo=TRUE}
 
+
+
 ```
+
+
+That's it for today! 
+
+## Exit ticket
+
+Write a code that generates a ggplot from a data frame called df and plots Date on the x-axis, discharge on the y-axis as a line, and colors by gauging_station. 
